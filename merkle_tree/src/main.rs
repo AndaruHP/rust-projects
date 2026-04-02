@@ -109,7 +109,7 @@ fn build_tree(data: &[String]) -> Node {
         // Proses dua node sekaligus per iterasi
         // chunks(2) memecah Vec jadi potongan berisi 2 elemen
         // Kalau jumlah node ganjil, potongan terakhir berisi 1
-        let mut i = 0;
+        let i = 0;
         while i < nodes.len() {
             if i + 1 < nodes.len() {
                 // Ada pasangan — buat Branch dari dua node
