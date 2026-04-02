@@ -7,7 +7,7 @@ fn calculate(a: f64, op: &str, b: f64) -> Result<f64, String> {
         "*" => Ok(a * b),
         "/" => {
             if b == 0.0 {
-                Err("Error: Tidak bisa dibagi dengan nol".to_string())
+                Err("Error: tidak bisa dibagi dengan nol".to_string())
             } else {
                 Ok(a / b)
             }
@@ -20,22 +20,12 @@ fn parse_number(input: &str) -> Result<f64, String> {
     input
         .trim()
         .parse::<f64>()
-        .map_err(|_| format!("Error: '{}' bukan angka valid", input.trim()))
-}
-
-fn read_line() -> String {
-    io::stdout().flush().unwrap();
-    let mut input = String::new();
-    io::stdin().read_line(&mut input).unwrap();
-    input
-}
-
-fn print(text: &str) {
-    print!("{}", text)
+        .map_err(|_| format!("Error: '{}' bukan angka yang valid", input.trim()))
 }
 
 fn main() {
-    println!("=== Kalkulator ===");
+    println!("=== Kalkulator Rust ===");
+    println!("Operator yang tersedia: +  -  *  /");
     println!("Ketik 'keluar' untuk berhenti.\n");
 
     loop {
@@ -44,7 +34,6 @@ fn main() {
         if input_a.trim().eq_ignore_ascii_case("keluar") {
             break;
         }
-
         let a = match parse_number(&input_a) {
             Ok(n) => n,
             Err(e) => {
@@ -53,9 +42,19 @@ fn main() {
             }
         };
 
-        print("Operator (+, -, *, /): ");
-        let op = read_line();
-        let op = op.trim();
+        let op_input = loop {
+            print("Operator (+, -, *, /): ");
+            let input = read_line();
+            let trimmed = input.trim().to_string();
+            if trimmed.eq_ignore_ascii_case("keluar") {
+                break trimmed;
+            }
+            if ["+", "-", "*", "/"].contains(&trimmed.as_str()) {
+                break trimmed;
+            }
+            println!("Error: operator '{}' tidak dikenal, coba lagi.\n", trimmed);
+        };
+        let op = op_input.as_str();
         if op.eq_ignore_ascii_case("keluar") {
             break;
         }
@@ -65,7 +64,6 @@ fn main() {
         if input_b.trim().eq_ignore_ascii_case("keluar") {
             break;
         }
-
         let b = match parse_number(&input_b) {
             Ok(n) => n,
             Err(e) => {
@@ -80,5 +78,16 @@ fn main() {
         }
     }
 
-    println!("Sampai jumpa")
+    println!("Sampai jumpa!");
+}
+
+fn read_line() -> String {
+    io::stdout().flush().unwrap();
+    let mut input = String::new();
+    io::stdin().read_line(&mut input).unwrap();
+    input
+}
+
+fn print(text: &str) {
+    print!("{}", text);
 }
